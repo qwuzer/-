@@ -22,4 +22,29 @@ public:
         return true;
     }
 
+    // void AddItem(const std::string& item) {
+    //     contents.push_back(item);
+    // }
+
+    // void ClearItems() {
+    //     contents.clear();
+    // }
+};
+
+class Table {
+public:
+    Pos pos;
+    Items items;
+
+    Table(const Pos& pos) : pos(pos) {}
+
+};
+
+class Customer {
+public:
+    Items item;
+    int award;
+
+    Customer(const Items& orderItem, int awardValue)
+        : item(orderItem), award(awardValue) {}
 };
