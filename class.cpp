@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <cmath>
 
-
 class Position {
 public: 
     int x, y;

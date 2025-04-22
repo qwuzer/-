@@ -49,6 +49,18 @@ public:
         return item_.getItems();
     }
 
+    bool hasItem(const string item) {
+        ensureInitialized();
+        return item_.hasItem(item);
+    }
+
+    bool canServeCustomer(const Customer& customer) const {
+        ensureInitialized();
+        return chef.hasAllItems(customer.getItems());
+    }
+
+
+
 private:
     Position pos_;
     Items item_;   
