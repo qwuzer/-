@@ -155,7 +155,7 @@ public:
                 map_[i][j] = line[j];
 
                 if (map_[i][j] == '0' || map_[i][j] == '1') {
-                    map_[i][j] = '.';  
+                    map_[i][j] = '.';  // 清理玩家初始位置
                 }
 
                 if (line[j] != '.' && line[j] != '#') {
@@ -171,8 +171,9 @@ public:
                         case 'O': name = "OVEN"; break;
                         default: name = "UNKNOWN"; break;
                     }
-                    if (name != "UNKNOWN")
+                    if (name != "UNKNOWN") {
                         equipment_[name] = Position{j, i};
+                    }
                 }
             }
         }
@@ -197,7 +198,7 @@ public:
                 int nx = current.x + dx;
                 int ny = current.y + dy;
                 if (isInside(nx, ny) && map_[ny][nx] == '#') {
-                    if (!isTableOccupied(Position{nx, ny})) {  
+                    if (!isTableOccupied(Position{nx, ny})) {
                         return Position{nx, ny};
                     }
                 }
@@ -212,85 +213,95 @@ public:
                 }
             }
         }
-        return Position{-1, -1};
+        return Position{-1, -1}; // 沒找到
     }
 
     void setTableState() {
-        Table_.clear();  
-    
+        tables_.clear();
+
         int num_tables_with_items = 0;
         cin >> num_tables_with_items; cin.ignore();
-    
+
         for (int i = 0; i < num_tables_with_items; i++) {
             int table_x, table_y;
             string item;
             cin >> table_x >> table_y >> item; cin.ignore();
-    
-            Table_.push_back(Table{Position{table_x, table_y}, item});
+
+            Table table(Position{table_x, table_y});
+            table.setItems(item);
+            tables_.push_back(table);
         }
     }
 
     vector<Position> getPosition(const string &name) {
         vector<Position> result;
+
         for (const auto &entry : equipment_) {
             if (entry.first == name) {
                 result.push_back(entry.second);
             }
         }
-        for (const auto &table : Table_) {
-            if (table.item == name) {
-                result.push_back(table.pos);
+
+        for (const auto &table : tables_) {
+            if (table.getItems().hasItem(name)) {
+                result.push_back(table.getPosition());
             }
         }
+
         return result;
     }
 
     void printMap() {
-        cerr<<"Map:"<<endl;
+        cerr << "Map:" << endl;
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 11; j++) {
                 cerr << map_[i][j];
             }
-            cerr<<endl;
+            cerr << endl;
         }
     }
 
     void printEquipment() {
-        cerr<<"Equipment:"<<endl;
+        cerr << "Equipment:" << endl;
         for (const auto& n : equipment_) {
-            cerr << n.first << ":" << n.second.x <<","<< n.second.y<<endl;
+            cerr << n.first << ": " << n.second.x << "," << n.second.y << endl;
         }
     }
 
     void printTable() {
         cerr << "Table:" << endl;
-        for (const auto& t : Table_) {
-            cerr << "Pos: (" << t.pos.x << ", " << t.pos.y << ")  Item: " << t.item << endl;
+        for (const auto& t : tables_) {
+            cerr << "Pos: (" << t.getPosition().x << ", " << t.getPosition().y << ")  Items: ";
+            for (const auto& item : t.getItems().getItems()) {
+                cerr << item << " ";
+            }
+            cerr << endl;
         }
     }
 
     vector<vector<char>> getMap() const { return map_; }
     unordered_map<string, Position> getEquipment() const { return equipment_; }
-    vector<Table> getTable() const { return Table_; }
+    vector<Table> getTable() const { return tables_; }
 
 private:
     vector<vector<char>> map_;
     unordered_map<string, Position> equipment_;
-    vector<Table> Table_;
+    vector<Table> tables_;
 
     bool isInside(int x, int y) {
         return x >= 0 && y >= 0 && x < 11 && y < 7;
     }
 
     bool isTableOccupied(const Position& pos) {
-        for (const auto& table : Table_) {
-            if (table.pos.x == pos.x && table.pos.y == pos.y) {
+        for (const auto& table : tables_) {
+            if (table.getPosition().x == pos.x && table.getPosition().y == pos.y) {
                 return true;
             }
         }
         return false;
     }
 };
+
 
 
 class Table {
