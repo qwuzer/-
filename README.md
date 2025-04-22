@@ -87,7 +87,7 @@
 - `vector<vector<char>> map_;` : kitchen map
 - `unordered_map<string, Pos> equipment_;` : store the equipments
 - `vector<Table> Table_;`
-- `bool isInside(int x, int y)`
+- `bool isInside(int x, int y)` : is (x, y) inside the map
 - `bool isTableOccupied(const Position& pos)`
 ### Customer
 - item: Items
