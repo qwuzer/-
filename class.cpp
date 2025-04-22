@@ -6,41 +6,58 @@ using namespace std;
 
 class Chef {
 public:
-    void update(int x, int y, const string& itemStr) {
+
+    Chef () {}
+
+    Chef(int x, int y, const std::string& itemStr) {
+        update(x, y, itemStr);
+    }
+
+
+    void update(int x, int y, const std::string& itemStr) {
         pos_ = {x, y};
         item_ = Item(itemStr);
+        initialized_ = true;
     }
 
     bool isEmptyHanded() const noexcept {
+        ensureInitialized();
         return item_.isEmpty(); // TODO
     }
 
-    string doActions(const string& action, cosnt Pos& target = {-1,-1}, const string& comment = "") const {
+    std::string doAction(const std::string& action, const Position& target = Position{-1,-1}, const std::string& comment = "") const {
+        ensureInitialized();
         if (action == "WAIT") {
-            return action + comment;
+            return action + "; " + comment;
         } else {
             return action + target.str() + "; " + commnet;
         }
     }
 
-    string dropItem(const Position& dropPos, const string& comment = "drop") const {
+    std::string dropItem(const Position& dropPos, const std::string& comment = "drop") const {
+        ensureInitialized();
         if (isEmptyHanded())
-            return doAction("WAIT", {}, "nothing to drop");
-
-        dropPos = findClosestEmptyTable() // TODO
-
+        return doAction("WAIT", Position{-1,-1}, "nothing to drop");
         return doAction("USE", dropPos, comment);
     }
 
+
     Position getPosition() const {
+        ensureInitialized();
         return pos_; 
     }
 
-    const vector<Item>& getInventory() const { 
-        return inventory_; 
+    const std::vector<std::string>& getItems() const {
+        ensureInitialized();
+        return item_.tokens();
     }
 
 private:
     Position pos_;
     Item item_;   
+    bool initialized_{false};
+
+    void ensureInitialized() const {
+        assert(initialized_ && "Chef not initialized: call update() or use parameterized ctor");
+    }
 }
