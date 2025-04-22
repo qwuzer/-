@@ -59,14 +59,53 @@
 
 
 ### Items
-- The contents of the item: vector str
 
-- hasItems
-- hasAllItems
+Represents a collection of item strings (e.g., ingredients or dishes).
 
-### Table 
-- Pos of items: Pos
-- The items on the table: Items
+#### Public Member Functions
+
+- `Items()`: Construct an empty `Items` object.
+
+- `Items(const std::string& rawString)`: Parse a string like `"DISH-ICE_CREAM"` and store each token as an item.
+
+- `void setItems(const std::string& rawString)`: Update the current item list using a dash-separated string.
+
+- `bool hasItem(const std::string& item) const`: Check whether the item exists in the current collection.
+
+- `bool hasAllItems(const Items& other) const`: Check whether all items in `other` are contained in the current object.
+
+- `bool isEmpty() const`: Return `true` if no items are held.
+
+- `const std::vector<std::string>& getItems() const`: Get a read-only reference to the current list of items.
+
+#### Private Data Members
+
+- `std::vector<std::string> items_`: Stores the list of items.
+
+### Table
+
+Represents a table with a position and the items on it.
+
+#### Public Member Functions
+
+- `Table()`: Default constructor.
+
+- `Table(const Position& pos)`: Construct a table at the given position.
+
+- `void setPosition(const Position& pos)`: Set the position of the table.
+
+- `void setItems(const std::string& itemStr)`: Update the items on the table.
+
+- `Position getPosition() const`: Retrieve the table's position.
+
+- `Items getItems() const`: Retrieve the items currently on the table.
+
+#### Private Data Members
+
+- `Position pos_`: The location of the table.
+
+- `Items items_`: Items currently placed on the table.
+
 
 
 ### Kitchen
@@ -92,7 +131,27 @@
 - `vector<Table> tables_` : List of all tables and their items.
 
 ### Customer
-- item: Items
-- award: int
+
+Represents a customer’s order and the reward given upon fulfilling it.
+
+#### Public Member Functions
+
+- `Customer()`: Default constructor.
+
+- `Customer(const std::string& itemStr, int awardValue)`: Construct with desired items and reward.
+
+- `void setItems(const std::string& itemStr)`: Update the required items.
+
+- `void setAward(int awardValue)`: Update the reward value.
+
+- `const Items& getItems() const`: Get the required items for the order.
+
+- `const int& getAward() const`: Get the reward amount.
+
+#### Private Data Members
+
+- `Items item_`: Required items for fulfilling the order.
+
+- `int award_`: Points awarded after fulfilling the order.
 
 
