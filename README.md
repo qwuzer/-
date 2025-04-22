@@ -15,47 +15,57 @@
 - isAdjacent
 ### Chef
 
-#### Public Data Members
-- **pos**: `Position`  
-  Current grid coordinates of the chef.
-- **item**: `Item`  
-  What the chef is holding this turn (parsed from input).
+#### Public Constructors
+- `Chef()`  
+  Default constructor; object must be initialized via `update()` before use.
+- `Chef(int x, int y, const std::string& itemStr)`  
+  One‑shot initialization of position and inventory.
 
 #### Public Methods
-- `void update(int x, int y, const string& itemStr)`  
-  Reinitialize the chef’s state each turn.  
-  - **x, y**: new position  
-  - **itemStr**: e.g. `"DISH-APPLE-ICE_CREAM"`
+- `void update(int x, int y, const std::string& itemStr)`  
+  Set or reset the chef’s state for this turn.  
+  - **x, y**: new coordinates  
+  - **itemStr**: dash‑separated tokens, e.g. `"DISH-APPLE-ICE_CREAM"`
 
 - `bool isEmptyHanded() const noexcept`  
-  Returns `true` if the chef’s inventory is empty.
+  Returns `true` if the chef holds no items.
 
-- `string doActions(const string& action,  
-                    const Position& target = {-1,-1},  
-                    const string& comment = "") const`  
-  Build the command string:  
-  - If `action=="WAIT"`, returns `"WAIT"` or `"WAIT; comment"`.  
-  - Otherwise returns `"MOVE x y; comment"` or `"USE x y; comment"`.
+- `std::string doAction(const std::string& action,  
+                       const Position& target = {-1,-1},  
+                       const std::string& comment = "") const`  
+  Build a turn command string:  
+  - `"WAIT; comment"` if `action=="WAIT"`.  
+  - Otherwise `"ACTION x y; comment"`, e.g. `"MOVE 3 5; chop dough"`.
 
-- `string dropItem(const Position& dropPos,  
-                  const string& comment = "drop") const`  
-  Issue a drop command:  
+- `std::string dropItem(const Position& dropPos,  
+                       const std::string& comment = "drop") const`  
+  Issue a drop action:  
   - If empty‑handed, returns `"WAIT; nothing to drop"`.  
-  - Otherwise calls  
-    ```cpp
-    Position dropPos = findClosestEmptyTable(); 
-    return doActions("USE", dropPos, comment);
-    ```
+  - Else returns `"USE x y; comment"` at `dropPos`.
 
 - `Position getPosition() const`  
   Returns the chef’s current `Position`.
 
-- `const Item& getInventory() const`  
-  Returns a const reference to the chef’s `Item` (parsed tokens).
+- `const std::vector<std::string>& getItems() const`  
+  Returns a const reference to the held item tokens.
+
+- `bool hasItem(const std::string item)`  
+  Returns `true` if the chef’s inventory contains that token.
+
+- `bool canServeCustomer(const Customer& customer) const`  
+  Returns `true` if the chef has all items required by `customer.getItems()`.
+
+#### Private Member Function
+- `void ensureInitialized() const`  
+  Asserts that the chef was initialized by `update()` or the parameterized ctor.
 
 #### Private Data Members
 - `Position pos_`  
-- `Item     item_`
+  Current coordinates.  
+- `Items    item_`  
+  Parsed inventory tokens.  
+- `bool     initialized_{false}`  
+  Tracks whether the chef has been initialized.
 
 
 ### Items
