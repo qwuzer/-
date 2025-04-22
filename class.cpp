@@ -115,11 +115,12 @@ public:
 
     std::string dropItem(const Position& dropPos, const std::string& comment = "drop") const {
         ensureInitialized();
-        if (isEmptyHanded())
-        return doAction("WAIT", Position{-1,-1}, "nothing to drop");
-        return doAction("USE", dropPos, comment);
-    }
+        if (isEmptyHanded()) {
+            return doAction("WAIT", Position{-1,-1}, "nothing to drop");
+        }
 
+        return doAction("USE", dropPos , comment);
+    }
 
     Position getPosition() const {
         ensureInitialized();
@@ -131,6 +132,16 @@ public:
         return item_.getItems();
     }
 
+    bool hasItem(const string item) {
+        ensureInitialized();
+        return item_.hasItem(item);
+    }
+
+    bool canServeCustomer(const Customer& customer) const {
+        ensureInitialized();
+        return chef.hasAllItems(customer.getItems());
+    }
+
 private:
     Position pos_;
     Items item_;   
@@ -140,7 +151,6 @@ private:
         assert(initialized_ && "Chef not initialized: call update() or use parameterized ctor");
     }
 };
-
 
 
 class Kitchen {
