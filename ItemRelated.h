@@ -13,52 +13,57 @@ public:
         std::string token;
         while (std::getline(ss, token, '-')) {
             if (!token.empty()) {
-                contents_.push_back(token);
+                items_.push_back(token);
             }
         }
     }
 
     bool hasItem(const std::string& item) const {
-        return std::find(contents_.begin(), contents_.end(), item) != contents_.end();
+        return std::find(items_.begin(), items_.end(), item) != items_.end();
     }
 
     bool hasAllItems(const Items& other) const {
-        for (const auto& item : other.contents_) {
+        for (const auto& item : other.items_) {
             if (!hasItem(item)) return false;
         }
         return true;
     }
 
+    const std::vector<std::string>& getItems() const 
+    {
+        return items_;
+    }
+
     bool isEmpty() const {
-        return contents_.empty();
+        return items_.empty();
     }
 
 private:
-    std::vector<std::string> contents_;
+    std::vector<std::string> items_;
 
     // void AddItem(const std::string& item) {
     //     contents_.push_back(item);
     // }
 
     // void ClearItems() {
-    //     contents.clear();
+    //     contents_.clear();
     // }
 };
 
 class Table {
 public:
-    Pos pos;
-    Items items;
-
-    Table(const Pos& pos) : pos(pos) {}
-
+    Table(const Pos& pos) : pos_(pos) {}
+private:
+    Pos pos_;
+    Items items_;
 };
 
 class Customer {
 public:
-    Items item;
-    int award;
-
     Customer(const Items& orderItem, int awardValue)
-        : item(orderItem), award(awardValue) {}
+        : item_(orderItem), award_(awardValue) {}
+
+private:
+    Items item_;
+    int award_;
 };
