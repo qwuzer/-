@@ -70,16 +70,10 @@
 
 
 ### Kitchen
-- map
-- currentStateMap
-- Table
-- equipment: unordered_map: "string": "Pos"
-
-- getClosestEmptyTable -> Pos
-- getPos(string) -> vector Pos
 #### Public Member Functions
 - `void initMap()` : Initialize the kitchen map
 - `void setTableState()` : Update what's on the table
+- `Position getClosestEmptyTable(const int &x, const int &y)`
 - `getPosition(const string &name)` : Get the position of sth
 
 #### Private Data Members
