@@ -33,11 +33,12 @@ public:
 
     std::string dropItem(const Position& dropPos, const std::string& comment = "drop") const {
         ensureInitialized();
-        if (isEmptyHanded())
-        return doAction("WAIT", Position{-1,-1}, "nothing to drop");
-        return doAction("USE", dropPos, comment);
-    }
+        if (isEmptyHanded()) {
+            return doAction("WAIT", Position{-1,-1}, "nothing to drop");
+        }
 
+        return doAction("USE", dropPos , comment);
+    }
 
     Position getPosition() const {
         ensureInitialized();
