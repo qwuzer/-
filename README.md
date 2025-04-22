@@ -71,24 +71,26 @@
 
 ### Kitchen
 #### Public Member Functions
-- `void initMap()` : Initialize the kitchen map
-- `void setTableState()` : Update what's on the table
-- `Position getClosestEmptyTable(const int &x, const int &y)`
-- `vector<Position> getPosition(const string &name) ` : Get the position of sth
-- `void printMap()`
-- `void printEquipment()`
-- `void printTable()`
-- `vector<vector<char>> getMap() const`
-- `unordered_map<string, Position> getEquipment() const`
-- `vector<Table> getTable() const`
+- `void initMap()` : Initialize the kitchen map.
+- `void setTableState()` : Update what's on the table.
+- `Position getClosestEmptyTable(const int &x, const int &y)` : Find the nearest empty table.
+- `vector<Position> getPosition(const string &name)` : Get the positions of specified items or equipment.
+- `void printMap()` : Debug print for the kitchen map.
+- `void printEquipment()` : Debug print for all equipment locations.
+- `void printTable()` : Debug print for all tables and their items.
+- `vector<vector<char>> getMap() const` : Getter for the map layout.
+- `unordered_map<string, Position> getEquipment() const` : Getter for equipment positions.
+- `vector<Table> getTable() const` : Getter for the list of tables.
 
+#### Private Member Functions
+- `bool isInside(int x, int y)` : Check if a coordinate is within map bounds.
+- `bool isTableOccupied(const Position& pos)` : Check if a table at this position is occupied.
 
 #### Private Data Members
-- `vector<vector<char>> map_;` : kitchen map
-- `unordered_map<string, Pos> equipment_;` : store the equipments
-- `vector<Table> Table_;`
-- `bool isInside(int x, int y)` : is (x, y) inside the map
-- `bool isTableOccupied(const Position& pos)`
+- `vector<vector<char>> map_` : The kitchen map grid.
+- `unordered_map<string, Position> equipment_` : Stores equipment name and their positions.
+- `vector<Table> tables_` : List of all tables and their items.
+
 ### Customer
 - item: Items
 - award: int
