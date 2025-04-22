@@ -17,6 +17,17 @@ public:
         }
     }
 
+    void setItems(const std::string& rawString) {
+        items_.clear();
+        std::stringstream ss(rawString);
+        std::string token;
+        while (std::getline(ss, token, '-')) {
+            if (!token.empty()) {
+                items_.push_back(token);
+            }
+        }
+    }
+
     bool hasItem(const std::string& item) const {
         return std::find(items_.begin(), items_.end(), item) != items_.end();
     }
@@ -63,6 +74,14 @@ public:
     
     Customer(const std::string& itemStr, int awardValue)
         : item_(Items(itemStr)), award_(awardValue) {}
+
+    void setItems(const std::string& itemStr) {
+        item_.setItems(itemStr);
+    }
+    
+    void setAward(int awardValue) {
+        award_ = awardValue;
+    }
 
     const Items& getItems() const {
         return item_;
