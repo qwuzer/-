@@ -317,7 +317,9 @@ private:
 class Table {
 public:
     Table() {}
-    Table(const Position& pos) : pos_(pos) {}
+    Table(const Position& pos, const std::string& itemStr) : pos_(pos) {
+        items_.setItems(itemStr);
+    }
 
     void setPosition(const Position& pos) {
         pos_ = pos;
