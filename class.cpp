@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <queue>
 
+using namespace std;
+
 
 class Position {
 public: 
@@ -278,7 +280,7 @@ public:
 
 private:
     vector<vector<char>> map_;
-    unordered_map<string, Pos> equipment_;
+    unordered_map<string, Position> equipment_;
     vector<Table> Table_;
     vector<vector<int>> currentStateMap_;
 
