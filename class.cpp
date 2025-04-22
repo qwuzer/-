@@ -5,6 +5,9 @@
 #include <cassert>
 #include <algorithm>
 #include <cmath>
+#include <unordered_map>
+#include <queue>
+
 
 
 class Position {
@@ -127,3 +130,170 @@ private:
 };
 
 
+class Kitchen {
+public:
+    Kitchen() : map_(7, vector<char>(11, '.')), currentStateMap_(7, vector<int>(11, -1)) {}
+
+    void initMap() {
+        for (int i = 0; i < 7; i++) {
+            string line;
+            getline(cin, line);
+            for (int j = 0; j < 11; j++) {
+                map_[i][j] = line[j];
+
+                if (map_[i][j] == '0' || map_[i][j] == '1') {
+                    map_[i][j] = '.';  
+                }
+
+                if (line[j] != '.' && line[j] != '#') {
+                    string name;
+                    switch (line[j]) {
+                        case 'D': name = "DISH"; break;
+                        case 'W': name = "WINDOW"; break;
+                        case 'B': name = "BLUEBERRIES"; break;
+                        case 'I': name = "ICE_CREAM"; break;
+                        case 'S': name = "STRAWBERRIES"; break;
+                        case 'C': name = "CHOPPING_BOARD"; break;
+                        case 'H': name = "DOUGH"; break;
+                        case 'O': name = "OVEN"; break;
+                        default: name = "UNKNOWN"; break;
+                    }
+                    if (name != "UNKNOWN")
+                        equipment_[name] = Pos(j, i);
+                }
+            }
+        }
+    }
+
+    Pos getClosestEmptyTable(const int &x, const int &y) {
+        vector<vector<bool>> visited(7, vector<bool>(11, false));
+        queue<pair<Pos, int>> q;
+        q.push({Pos(x, y), 0});
+        visited[y][x] = true;
+
+        vector<pair<int, int>> directions = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+        vector<pair<int, int>> neighbor8 = {
+            {0,1}, {1,0}, {0,-1}, {-1,0},
+            {1,1}, {1,-1}, {-1,1}, {-1,-1}
+        };
+
+        while (!q.empty()) {
+            auto [current, dist] = q.front(); q.pop();
+
+            for (auto [dx, dy] : neighbor8) {
+                int nx = current.x + dx;
+                int ny = current.y + dy;
+                if (isInside(nx, ny) && map_[ny][nx] == '#') {
+                    if (!isTableOccupied(Pos(nx, ny))) {  
+                        return Pos(nx, ny);
+                    }
+                }
+            }
+
+            for (auto [dx, dy] : directions) {
+                int nx = current.x + dx;
+                int ny = current.y + dy;
+                if (isInside(nx, ny) && !visited[ny][nx] && map_[ny][nx] == '.') {
+                    visited[ny][nx] = true;
+                    q.push({Pos(nx, ny), dist + 1});
+                }
+            }
+        }
+
+        return Pos(-1, -1);  
+    }
+    void setTableState() {
+        Table_.clear();  
+    
+        int num_tables_with_items = 0;
+        cin >> num_tables_with_items; cin.ignore();
+    
+        for (int i = 0; i < num_tables_with_items; i++) {
+            int table_x, table_y;
+            string item;
+            cin >> table_x >> table_y >> item; cin.ignore();
+    
+            Table_.push_back(Table{Pos{table_x, table_y}, item});
+        }
+    }
+    vector<Pos> getPos(const string &name) {
+        vector<Pos> result;
+    
+        for (const auto &entry : equipment_) {
+            if (entry.first == name) {
+                result.push_back(entry.second);
+            }
+        }
+    
+        for (const auto &table : Table_) {
+            if (table.item == name) {
+                result.push_back(table.pos);
+            }
+        }
+    
+        return result;
+    }
+    
+
+
+
+    void printMap()
+    {
+        cerr<<"Map:"<<endl;
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 11; j++)
+            {
+                cerr << map_[i][j];
+            }
+            cerr<<endl;
+        }
+    }
+    void printEquipment()
+    {
+        cerr<<"Equipment:"<<endl;
+        for (const auto& n : equipment_) {
+            cerr << n.first << ":" << n.second.x <<","<< n.second.y<<endl;
+        }
+    }
+    void printTable() {
+        cerr << "Table:" << endl;
+        for (const auto& t : Table_) {
+            cerr << "Pos: (" << t.pos.x << ", " << t.pos.y << ")  Item: " << t.item << endl;
+        }
+    }
+    vector<vector<char>> getMap() const {
+        return map_;
+    }
+    
+    unordered_map<string, Pos> getEquipment() const {
+        return equipment_;
+    }
+    
+    vector<Table> getTable() const {
+        return Table_;
+    }
+    
+    
+    
+
+private:
+    vector<vector<char>> map_;
+    unordered_map<string, Pos> equipment_;
+    vector<Table> Table_;
+    vector<vector<int>> currentStateMap_;
+
+    
+
+    bool isInside(int x, int y) {
+        return x >= 0 && y >= 0 && x < 11 && y < 7;
+    }
+    bool isTableOccupied(const Pos& pos) {
+        for (const auto& table : Table_) {
+            if (table.pos.x == pos.x && table.pos.y == pos.y) {
+                return true;  
+            }
+        }
+        return false;
+    }
+};
