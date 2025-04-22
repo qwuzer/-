@@ -313,6 +313,7 @@ public:
     Items getItems() const {
         return items_;
     }
+private:
     Position pos_;
     Items items_;
 };
