@@ -219,7 +219,7 @@ public:
         }
     }
 
-    vector<Position> getPos(const string &name) {
+    vector<Position> getPosition(const string &name) {
         vector<Position> result;
         for (const auto &entry : equipment_) {
             if (entry.first == name) {
