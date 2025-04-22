@@ -8,14 +8,16 @@
 #include <unordered_map>
 #include <queue>
 
+using namespace std;
+
 
 class Position {
 public: 
     int x, y;
-    int distanceTo(const Pos& other) const {
+    int distanceTo(const Position& other) const {
         return abs(x - other.x) + abs(y - other.y);
     }
-    bool isAdjacentTo(const Pos& other) const {
+    bool isAdjacentTo(const Position& other) const {
         return distanceTo(other) == 1 || (abs(x - other.x) == 1 && abs(y - other.y) == 1);
     }
     std::string str() const {
@@ -129,9 +131,10 @@ private:
 };
 
 
+
 class Kitchen {
 public:
-    Kitchen() : map_(7, vector<char>(11, '.')), currentStateMap_(7, vector<int>(11, -1)) {}
+    Kitchen() : map_(7, vector<char>(11, '.')) {}
 
     void initMap() {
         for (int i = 0; i < 7; i++) {
@@ -158,16 +161,16 @@ public:
                         default: name = "UNKNOWN"; break;
                     }
                     if (name != "UNKNOWN")
-                        equipment_[name] = Pos(j, i);
+                        equipment_[name] = Position{j, i};
                 }
             }
         }
     }
 
-    Pos getClosestEmptyTable(const int &x, const int &y) {
+    Position getClosestEmptyTable(const int &x, const int &y) {
         vector<vector<bool>> visited(7, vector<bool>(11, false));
-        queue<pair<Pos, int>> q;
-        q.push({Pos(x, y), 0});
+        queue<pair<Position, int>> q;
+        q.push({Position{x, y}, 0});
         visited[y][x] = true;
 
         vector<pair<int, int>> directions = {{0,1}, {1,0}, {0,-1}, {-1,0}};
@@ -183,8 +186,8 @@ public:
                 int nx = current.x + dx;
                 int ny = current.y + dy;
                 if (isInside(nx, ny) && map_[ny][nx] == '#') {
-                    if (!isTableOccupied(Pos(nx, ny))) {  
-                        return Pos(nx, ny);
+                    if (!isTableOccupied(Position{nx, ny})) {  
+                        return Position{nx, ny};
                     }
                 }
             }
@@ -194,13 +197,13 @@ public:
                 int ny = current.y + dy;
                 if (isInside(nx, ny) && !visited[ny][nx] && map_[ny][nx] == '.') {
                     visited[ny][nx] = true;
-                    q.push({Pos(nx, ny), dist + 1});
+                    q.push({Position{nx, ny}, dist + 1});
                 }
             }
         }
-
-        return Pos(-1, -1);  
+        return Position{-1, -1};
     }
+
     void setTableState() {
         Table_.clear();  
     
@@ -212,85 +215,66 @@ public:
             string item;
             cin >> table_x >> table_y >> item; cin.ignore();
     
-            Table_.push_back(Table{Pos{table_x, table_y}, item});
+            Table_.push_back(Table{Position{table_x, table_y}, item});
         }
     }
-    vector<Pos> getPos(const string &name) {
-        vector<Pos> result;
-    
+
+    vector<Position> getPos(const string &name) {
+        vector<Position> result;
         for (const auto &entry : equipment_) {
             if (entry.first == name) {
                 result.push_back(entry.second);
             }
         }
-    
         for (const auto &table : Table_) {
             if (table.item == name) {
                 result.push_back(table.pos);
             }
         }
-    
         return result;
     }
-    
 
-
-
-    void printMap()
-    {
+    void printMap() {
         cerr<<"Map:"<<endl;
-        for (int i = 0; i < 7; i++)
-        {
-            for (int j = 0; j < 11; j++)
-            {
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 11; j++) {
                 cerr << map_[i][j];
             }
             cerr<<endl;
         }
     }
-    void printEquipment()
-    {
+
+    void printEquipment() {
         cerr<<"Equipment:"<<endl;
         for (const auto& n : equipment_) {
             cerr << n.first << ":" << n.second.x <<","<< n.second.y<<endl;
         }
     }
+
     void printTable() {
         cerr << "Table:" << endl;
         for (const auto& t : Table_) {
             cerr << "Pos: (" << t.pos.x << ", " << t.pos.y << ")  Item: " << t.item << endl;
         }
     }
-    vector<vector<char>> getMap() const {
-        return map_;
-    }
-    
-    unordered_map<string, Pos> getEquipment() const {
-        return equipment_;
-    }
-    
-    vector<Table> getTable() const {
-        return Table_;
-    }
-    
-    
-    
+
+    vector<vector<char>> getMap() const { return map_; }
+    unordered_map<string, Position> getEquipment() const { return equipment_; }
+    vector<Table> getTable() const { return Table_; }
 
 private:
     vector<vector<char>> map_;
-    unordered_map<string, Pos> equipment_;
+    unordered_map<string, Position> equipment_;
     vector<Table> Table_;
-    vector<vector<int>> currentStateMap_;
-
-    
 
     bool isInside(int x, int y) {
         return x >= 0 && y >= 0 && x < 11 && y < 7;
     }
-    bool isTableOccupied(const Pos& pos) {
+
+    bool isTableOccupied(const Position& pos) {
         for (const auto& table : Table_) {
             if (table.pos.x == pos.x && table.pos.y == pos.y) {
-                return true;  
+                return true;
             }
         }
         return false;
