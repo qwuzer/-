@@ -78,6 +78,10 @@
 - `void printMap()`
 - `void printEquipment()`
 - `void printTable()`
+- `vector<vector<char>> getMap() const`
+- `unordered_map<string, Position> getEquipment() const`
+- `vector<Table> getTable() const`
+
 
 #### Private Data Members
 - `vector<vector<char>> map_;` : kitchen map
