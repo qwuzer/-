@@ -9,7 +9,6 @@
 #include <queue>
 
 
-
 class Position {
 public: 
     int x, y;
