@@ -2,7 +2,6 @@
 #include <string>
 #include <algorithm>
 #include <sstream>
-#include "position.h"
 
 class Items {
 public:
