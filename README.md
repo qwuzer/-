@@ -75,6 +75,9 @@
 - `void setTableState()` : Update what's on the table
 - `Position getClosestEmptyTable(const int &x, const int &y)`
 - `vector<Position> getPosition(const string &name) ` : Get the position of sth
+- `void printMap()`
+- `void printEquipment()`
+- `void printTable()`
 
 #### Private Data Members
 - `vector<vector<char>> map_;` : kitchen map
