@@ -1,29 +1,43 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <sstream>
 #include "position.h"
 
 class Items {
 public:
-    std::vector<std::string> contents;
-
     Items() {}
 
-    Items(const std::vector<std::string>& initContents) : contents(initContents) {}
-
-    bool HasItem(const std::string& item) const {
-        return std::find(contents.begin(), contents.end(), item) != contents.end();
+    Items(const std::string& rawString) {
+        std::stringstream ss(rawString);
+        std::string token;
+        while (std::getline(ss, token, '-')) {
+            if (!token.empty()) {
+                contents_.push_back(token);
+            }
+        }
     }
 
-    bool HasAllItems(const Items& other) const {
-        for (const auto& item : other.contents) {
-            if (!HasItem(item)) return false;
+    bool hasItem(const std::string& item) const {
+        return std::find(contents_.begin(), contents_.end(), item) != contents_.end();
+    }
+
+    bool hasAllItems(const Items& other) const {
+        for (const auto& item : other.contents_) {
+            if (!hasItem(item)) return false;
         }
         return true;
     }
 
+    bool isEmpty() const {
+        return contents_.empty();
+    }
+
+private:
+    std::vector<std::string> contents_;
+
     // void AddItem(const std::string& item) {
-    //     contents.push_back(item);
+    //     contents_.push_back(item);
     // }
 
     // void ClearItems() {
