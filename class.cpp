@@ -40,6 +40,17 @@ public:
         }
     }
 
+    void setItems(const std::string& rawString) {
+        items_.clear();
+        std::stringstream ss(rawString);
+        std::string token;
+        while (std::getline(ss, token, '-')) {
+            if (!token.empty()) {
+                items_.push_back(token);
+            }
+        }
+    }
+
     bool hasItem(const std::string& item) const {
         return std::find(items_.begin(), items_.end(), item) != items_.end();
     }
@@ -279,4 +290,29 @@ private:
         }
         return false;
     }
+};
+
+
+class Table {
+public:
+    Table() {}
+    Table(const Position& pos) : pos_(pos) {}
+
+    void setPosition(const Position& pos) {
+        pos_ = pos;
+    }
+
+    void setItems(const std::string& itemStr) {
+        items_.setItems(itemStr);
+    }
+
+    Position getPosition() const {
+        return pos_;
+    }
+
+    Items getItems() const {
+        return items_;
+    }
+    Position pos_;
+    Items items_;
 };
