@@ -62,7 +62,24 @@ private:
 
 class Table {
 public:
+    Table() {}
     Table(const Position& pos) : pos_(pos) {}
+
+    void setPosition(const Position& pos) {
+        pos_ = pos;
+    }
+
+    void setItems(const std::string& itemStr) {
+        items_.setItems(itemStr);
+    }
+
+    Position getPosition() const {
+        return pos_;
+    }
+
+    Items getItems() const {
+        return items_;
+    }
 private:
     Position pos_;
     Items items_;
