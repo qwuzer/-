@@ -51,16 +51,26 @@ private:
 
 class Table {
 public:
-    Table(const Pos& pos) : pos_(pos) {}
+    Table(const Position& pos) : pos_(pos) {}
 private:
-    Pos pos_;
+    Position pos_;
     Items items_;
 };
 
 class Customer {
 public:
-    Customer(const Items& orderItem, int awardValue)
-        : item_(orderItem), award_(awardValue) {}
+    Customer() {}
+    
+    Customer(const std::string& itemStr, int awardValue)
+        : item_(Items(itemStr)), award_(awardValue) {}
+
+    const Items& getItems() const {
+        return item_;
+    }
+
+    const int& getAward() const {
+        return award_;
+    }
 
 private:
     Items item_;
