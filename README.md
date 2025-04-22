@@ -77,6 +77,15 @@
 
 - getClosestEmptyTable -> Pos
 - getPos(string) -> vector Pos
+#### Public Member Functions
+- `void initMap()` : Initialize the kitchen map
+- `void setTableState()` : Update what's on the table
+- `getPosition(const string &name)` : Get the position of sth
+
+#### Private Data Members
+- `vector<vector<char>> map_;` : kitchen map
+- `unordered_map<string, Pos> equipment_;` : store the equipments
+- `vector<Table> Table_;`
 ### Customer
 - item: Items
 - award: int
