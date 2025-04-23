@@ -73,14 +73,6 @@ public:
 
 private:
     std::vector<std::string> items_;
-
-    // void AddItem(const std::string& item) {
-    //     contents_.push_back(item);
-    // }
-
-    // void ClearItems() {
-    //     contents_.clear();
-    // }
 };
 
 
