@@ -159,18 +159,18 @@ public:
     static constexpr int kMaxHeight = 7;
     static constexpr int kMaxWidth = 11;
 
-    Kitchen() : map_(kMaxHeight, vector<char>(kMaxWidth, '.')) {}
+    Kitchen() : map_(kMaxHeight, std::vector<char>(kMaxWidth, '.')) {}
 
     void initMap() {
         for (int i = 0; i < kMaxHeight; i++) {
-            string line;
-            getline(cin, line);
+            std::string line;
+            getline(std::cin, line);
             for (int j = 0; j < kMaxWidth; j++) {
                 char ch = line[j];
                 map_[i][j] = (ch == '0' || ch == '1') ? '.' : ch;
 
                 if (ch != '.' && ch != '#' && ch != '0' && ch != '1') {
-                    string name;
+                    std::string name;
                     switch (ch) {
                         case 'D': name = "DISH"; break;
                         case 'W': name = "WINDOW"; break;
@@ -181,7 +181,7 @@ public:
                         case 'H': name = "DOUGH"; break;
                         case 'O': name = "OVEN"; break;
                         default:
-                            cerr << "Warning: Unknown equipment character: " << ch << endl;
+                            std::cerr << "Warning: Unknown equipment character: " << ch << std::endl;
                             continue;
                     }
                     equipment_[name] = Position{j, i};
@@ -194,25 +194,25 @@ public:
         tables_.clear();
 
         int num_tables_with_items;
-        cin >> num_tables_with_items; cin.ignore();
+        std::cin >> num_tables_with_items; std::cin.ignore();
 
         for (int i = 0; i < num_tables_with_items; i++) {
             int table_x, table_y;
-            string item;
-            cin >> table_x >> table_y >> item; cin.ignore();
+            std::string item;
+            std::cin >> table_x >> table_y >> item; std::cin.ignore();
 
             tables_.emplace_back(Position{table_x, table_y}, item);
         }
     }
 
     Position getClosestEmptyTable(const int& x, const int& y) const {
-        vector<vector<bool>> visited(kMaxHeight, vector<bool>(kMaxWidth, false));
-        queue<Position> q;
+        std::vector<std::vector<bool>> visited(kMaxHeight, std::vector<bool>(kMaxWidth, false));
+        std::queue<Position> q;
         q.push(Position{x, y});
         visited[y][x] = true;
 
-        vector<pair<int, int>> directions = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-        vector<pair<int, int>> neighbor8 = {
+        std::vector<std::pair<int, int>> directions = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+        std::vector<std::pair<int, int>> neighbor8 = {
             {0,1}, {1,0}, {0,-1}, {-1,0},
             {1,1}, {1,-1}, {-1,1}, {-1,-1}
         };
@@ -242,8 +242,8 @@ public:
         return Position{-1, -1};
     }
 
-    vector<Position> getPosition(const string& name) const {
-        vector<Position> result;
+    std::vector<Position> getPosition(const std::string& name) const {
+        std::vector<Position> result;
 
         auto it = equipment_.find(name);
         if (it != equipment_.end()) {
@@ -260,39 +260,39 @@ public:
     }
 
     void printMap() const {
-        cerr << "Map:" << endl;
+        std::cerr << "Map:" << std::endl;
         for (int i = 0; i < kMaxHeight; i++) {
             for (int j = 0; j < kMaxWidth; j++) {
-                cerr << map_[i][j];
+                std::cerr << map_[i][j];
             }
-            cerr << endl;
+            std::cerr << std::endl;
         }
     }
 
     void printEquipment() const {
-        cerr << "Equipment:" << endl;
+        std::cerr << "Equipment:" << std::endl;
         for (const auto& n : equipment_) {
-            cerr << n.first << ": " << n.second.x << "," << n.second.y << endl;
+            std::cerr << n.first << ": " << n.second.x << "," << n.second.y << std::endl;
         }
     }
 
     void printTable() const {
-        cerr << "Table:" << endl;
+        std::cerr << "Table:" << std::endl;
         for (const auto& t : tables_) {
-            cerr << "Pos: (" << t.getPosition().x << ", " << t.getPosition().y << ")  Items: ";
-            cerr << t.getItems().getItemsString() << " ";
-            cerr << endl;
+            std::cerr << "Pos: (" << t.getPosition().x << ", " << t.getPosition().y << ")  Items: ";
+            std::cerr << t.getItems().getItemsString() << " ";
+            std::cerr << std::endl;
         }
     }
 
-    const vector<vector<char>>& getMap() const { return map_; }
-    const unordered_map<string, Position>& getEquipment() const { return equipment_; }
-    const vector<Table>& getTable() const { return tables_; }
+    const std::vector<std::vector<char>>& getMap() const { return map_; }
+    const std::unordered_map<std::string, Position>& getEquipment() const { return equipment_; }
+    const std::vector<Table>& getTable() const { return tables_; }
 
 private:
-    vector<vector<char>> map_;
-    unordered_map<string, Position> equipment_;
-    vector<Table> tables_;
+    std::vector<std::vector<char>> map_;
+    std::unordered_map<std::string, Position> equipment_;
+    std::vector<Table> tables_;
 
     bool isInside(int x, int y) const {
         return x >= 0 && y >= 0 && x < kMaxWidth && y < kMaxHeight;
