@@ -184,7 +184,7 @@ public:
         initialized_ = true;
     }
 
-    bool isEmptyHanded() const noexcept {
+    bool isEmptyHanded() const {
         ensureInitialized();
         return item_.isEmpty(); 
     }
@@ -217,7 +217,7 @@ public:
         return item_.getItems();
     }
 
-    bool hasItem(const string& item) {
+    bool hasItem(const string& item) const {
         ensureInitialized();
         return item_.hasItem(item);
     }
