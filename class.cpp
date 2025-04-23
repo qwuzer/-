@@ -335,7 +335,7 @@ public:
         }
 
         for (const auto& table : tables_) {
-            if (table.getItems().hasItem(name)) {
+            if (table.getItems().hasOnlyItem(name)) {
                 result.push_back(table.getPosition());
             }
         }
