@@ -52,6 +52,14 @@ Represents a collection of item strings (e.g., ingredients or dishes).
 
 - `void setItems(const string& rawString)`: Update the current item list using a dash-separated string.
 
+- `void addItem(const string& item)`: Add a new item to the collection.
+
+- `void removeItem(const string& item)`: Remove all instances of the specified item from the collection.
+
+- `void clear()`: Clear all items from the collection.
+
+- `bool hasOnlyItem(const string& item)` const: Return true if the current collection contains only the specified item.
+
 - `bool hasItem(const string& item) const`: Check whether the item exists in the current collection.
 
 - `bool hasAllItems(const Items& other) const`: Check whether all items in `other` are contained in the current object.
