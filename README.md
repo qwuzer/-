@@ -1,16 +1,29 @@
+
 # Class design
 
 - Naming conventions: https://www.geeksforgeeks.org/naming-convention-in-c/
 
-
-##### Table of Contents  
-[Position](###Position)  
-[Items](###Items)  
-[Customer](###Customer)  
-[Table](###Table)  
-[Chef](###Chef)  
-[Kitchen](###Kitchen)  
-
+- [Class design](#class-design)
+    - [Position](#position)
+      - [Public Data Members](#public-data-members)
+      - [Public Member Functions](#public-member-functions)
+    - [Items](#items)
+      - [Public Member Functions](#public-member-functions-1)
+      - [Private Data Members](#private-data-members)
+    - [Customer](#customer)
+      - [Public Member Functions](#public-member-functions-2)
+      - [Private Data Members](#private-data-members-1)
+    - [Table](#table)
+      - [Public Member Functions](#public-member-functions-3)
+      - [Private Data Members](#private-data-members-2)
+    - [Chef](#chef)
+      - [Public Member Functions](#public-member-functions-4)
+      - [Private Member Function](#private-member-function)
+      - [Private Data Members](#private-data-members-3)
+    - [Kitchen](#kitchen)
+      - [Public Member Functions](#public-member-functions-5)
+      - [Private Member Functions](#private-member-functions)
+      - [Private Data Members](#private-data-members-4)
 
 
 ### Position
