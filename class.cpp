@@ -35,69 +35,66 @@ public:
     Items() {}
 
     Items(const std::string& rawString) {
-        setItems(rawString);
+        std::stringstream ss(rawString);
+        std::string token;
+        while (std::getline(ss, token, '-')) {
+            if (!token.empty()) {
+                items_.push_back(token);
+            }
+        }
     }
 
     void setItems(const std::string& rawString) {
-        items_ = rawString;
+        items_.clear();
+        std::stringstream ss(rawString);
+        std::string token;
+        while (std::getline(ss, token, '-')) {
+            if (!token.empty()) {
+                items_.push_back(token);
+            }
+        }
+    }
+
+    bool hasOnlyItem(const std::string& item) const {
+        return items_.size() == 1 && items_[0] == item;
     }
 
     bool hasItem(const std::string& item) const {
-        const auto targetItems = Items(item).getItems();
-        const auto currentItems = getItems();
-
-        for (const auto& i : targetItems) {
-            bool found = false;
-            for (const auto& j : currentItems) {
-                if (i.compare(j) == 0) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) return false;
-        }
-        return true;
+        return std::find(items_.begin(), items_.end(), item) != items_.end();
     }
 
-
     bool hasAllItems(const Items& other) const {
-        for (const auto& item : other.getItems()) {
+        for (const auto& item : other.items_) {
             if (!hasItem(item)) return false;
         }
         return true;
     }
-
-    bool hasAllItems(const Items& other) const {
-        std::stringstream ss(other.items_);
-        std::string token;
-        while (std::getline(ss, token, '-')) {
-            if (!hasItem(token)) return false;
-        }
-        return true;
-    }
-
     std::string getItemsString() const {
-        return items_;
-    }
-
-    std::vector<std::string> getItems() const {
-        std::vector<std::string> result;
-        std::stringstream ss(items_);
-        std::string token;
-        while (std::getline(ss, token, '-')) {
-            if (!token.empty()) {
-                result.push_back(token);
+        std::string result;
+        for (size_t i = 0; i < items_.size(); ++i) {
+            result += items_[i];
+            if (i < items_.size() - 1) {
+                result += "-";
             }
         }
         return result;
+    }
+
+    const std::vector<std::string>& getItems() const 
+    {
+        return items_;
     }
 
     bool isEmpty() const {
         return items_.empty();
     }
 
+    void clear() {
+        items_.clear();
+    }
+
 private:
-    std::string items_;
+    std::vector<std::string> items_;
 };
 
 
@@ -382,3 +379,10 @@ private:
     Items item_;
     int award_;
 };
+
+int main()
+{
+    Kitchen k = Kitchen();
+    
+    return 0;
+}
