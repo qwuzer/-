@@ -57,7 +57,7 @@ public:
 
     bool canServeCustomer(const Customer& customer) const {
         ensureInitialized();
-        return chef.hasAllItems(customer.getItems());
+        return item_.hasAllItems(customer.getItems());
     }
 
 
