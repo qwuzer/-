@@ -280,9 +280,7 @@ public:
         cerr << "Table:" << endl;
         for (const auto& t : tables_) {
             cerr << "Pos: (" << t.getPosition().x << ", " << t.getPosition().y << ")  Items: ";
-            for (const auto& item : t.getItems().getItems()) {
-                cerr << item << " ";
-            }
+            cerr << t.getItems().getItemsString() << " ";
             cerr << endl;
         }
     }
