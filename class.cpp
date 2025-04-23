@@ -55,6 +55,21 @@ public:
         }
     }
 
+    void addItem(const std::string& item) {
+        items_.push_back(item);
+    }
+
+    void removeItem(const std::string& item) {
+        auto it = std::remove(items_.begin(), items_.end(), item);
+        if (it != items_.end()) {
+            items_.erase(it, items_.end());
+        }
+    }
+
+    void clear() {
+        items_.clear();
+    }
+
     bool hasOnlyItem(const std::string& item) const {
         return items_.size() == 1 && items_[0] == item;
     }
@@ -69,6 +84,11 @@ public:
         }
         return true;
     }
+
+    bool isEmpty() const {
+        return items_.empty();
+    }
+
     std::string getItemsString() const {
         std::string result;
         for (size_t i = 0; i < items_.size(); ++i) {
@@ -85,14 +105,6 @@ public:
         return items_;
     }
 
-    bool isEmpty() const {
-        return items_.empty();
-    }
-
-    void clear() {
-        items_.clear();
-    }
-
 private:
     std::vector<std::string> items_;
 };
@@ -100,60 +112,60 @@ private:
 
 
 class Table {
-    public:
-        Table() {}
-        Table(const Position& pos, const std::string& itemStr) : pos_(pos) {
-            items_.setItems(itemStr);
-        }
+public:
+    Table() {}
+    Table(const Position& pos, const std::string& itemStr) : pos_(pos) {
+        items_.setItems(itemStr);
+    }
+
+    void setPosition(const Position& pos) {
+        pos_ = pos;
+    }
+
+    void setItems(const std::string& itemStr) {
+        items_.setItems(itemStr);
+    }
+
+    Position getPosition() const {
+        return pos_;
+    }
+
+    Items getItems() const {
+        return items_;
+    }
+private:
+    Position pos_;
+    Items items_;
+};
+
+
+class Customer {
+public:
+    Customer() {}
     
-        void setPosition(const Position& pos) {
-            pos_ = pos;
-        }
+    Customer(const std::string& itemStr, int awardValue)
+        : item_(Items(itemStr)), award_(awardValue) {}
+
+    void setItems(const std::string& itemStr) {
+        item_.setItems(itemStr);
+    }
     
-        void setItems(const std::string& itemStr) {
-            items_.setItems(itemStr);
-        }
-    
-        Position getPosition() const {
-            return pos_;
-        }
-    
-        Items getItems() const {
-            return items_;
-        }
-    private:
-        Position pos_;
-        Items items_;
-    };
-    
-    
-    class Customer {
-    public:
-        Customer() {}
-        
-        Customer(const std::string& itemStr, int awardValue)
-            : item_(Items(itemStr)), award_(awardValue) {}
-    
-        void setItems(const std::string& itemStr) {
-            item_.setItems(itemStr);
-        }
-        
-        void setAward(int awardValue) {
-            award_ = awardValue;
-        }
-    
-        const Items& getItems() const {
-            return item_;
-        }
-    
-        const int& getAward() const {
-            return award_;
-        }
-    
-    private:
-        Items item_;
-        int award_;
-    };
+    void setAward(int awardValue) {
+        award_ = awardValue;
+    }
+
+    const Items& getItems() const {
+        return item_;
+    }
+
+    const int& getAward() const {
+        return award_;
+    }
+
+private:
+    Items item_;
+    int award_;
+};
 
 
 
