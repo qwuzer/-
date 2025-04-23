@@ -184,7 +184,7 @@ public:
         initialized_ = true;
     }
 
-    bool isEmptyHanded() const noexcept {
+    bool isEmptyHanded() const {
         ensureInitialized();
         return item_.isEmpty(); 
     }
@@ -217,7 +217,7 @@ public:
         return item_.getItems();
     }
 
-    bool hasItem(const string& item) {
+    bool hasItem(const string& item) const {
         ensureInitialized();
         return item_.hasItem(item);
     }
@@ -394,3 +394,76 @@ private:
 
 
 
+
+int main() {
+    // --- Position tests ---
+    Position p1{2, 3}, p2{5, 3};
+    cout << "p1: " << p1.str()
+         << ", p2: " << p2.str() << "\n";
+    cout << "Distance p1→p2: " << p1.distanceTo(p2) << "\n";
+    cout << "Adjacent? " << boolalpha << p1.isAdjacentTo(p2) << "\n\n";
+
+    // --- Items tests ---
+    Items its("DISH-DOUGH-ICE_CREAM");
+    cout << "Items string: " << its.getItemsString() << "\n";
+    cout << "Parsed tokens:";
+    for (auto& tok : its.getItems())
+        cout << " [" << tok << "]";
+    cout << "\n";
+    cout << "Has 'DOUGH'? " << its.hasItem("DOUGH") << "\n";
+    cout << "Has only 'DOUGH'? " << its.hasOnlyItem("DOUGH") << "\n";
+    its.addItem("BLUEBERRIES");
+    cout << "After add, has 'BLUEBERRIES'? " << its.hasItem("BLUEBERRIES") << "\n";
+    its.removeItem("ICE_CREAM");
+    cout << "After remove, has 'ICE_CREAM'? " << its.hasItem("ICE_CREAM") << "\n";
+    cout << "Is empty? " << its.isEmpty() << "\n";
+    its.clear();
+    cout << "After clear, is empty? " << its.isEmpty() << "\n\n";
+
+    // --- Table tests ---
+    Table tbl({4,2}, "DISH-DOUGH");
+    cout << "Table at " << tbl.getPosition().str()
+         << " holds: " << tbl.getItems().getItemsString() << "\n";
+    tbl.setPosition({6,1});
+    tbl.setItems("TART-ICE_CREAM");
+    cout << "Moved to " << tbl.getPosition().str()
+         << ", now holds: " << tbl.getItems().getItemsString() << "\n\n";
+
+    // --- Customer tests ---
+    Customer cust("DISH-DOUGH", 150);
+    cout << "Customer wants: " << cust.getItems().getItemsString()
+         << ", award: " << cust.getAward() << "\n";
+    cust.setItems("TART-DOUGH");
+    cust.setAward(200);
+    cout << "After update wants: " << cust.getItems().getItemsString()
+         << ", award: " << cust.getAward() << "\n\n";
+
+    // --- Chef tests ---
+    Chef chef; 
+    chef.update(1,1,"NONE");
+    cout << "Chef empty? " << chef.isEmptyHanded() << "\n";
+    chef.update(1,1,"DISH-DOUGH");
+    cout << "Chef holds:";
+    for (auto& tok : chef.getItems()) cout << " " << tok;
+    cout << "\n";
+    cout << chef.doAction("MOVE", {2,2}, "go chop") << "\n";
+    cout << chef.doAction("USE", {4,5}, "pick up") << "\n";
+    cout << chef.dropItem({3,3}, "drop here") << "\n";
+    cout << "Can serve cust? " << chef.canServeCustomer(cust) << "\n\n";
+
+    // --- Kitchen tests ---
+    Kitchen kitchen;
+    cout << "Initial map:\n";
+    kitchen.printMap();
+    cout << "Equipment (should be empty):\n";
+    kitchen.printEquipment();
+    cout << "Tables (should be none):\n";
+    kitchen.printTable();
+    auto emptyTable = kitchen.getClosestEmptyTable(0,0);
+    cout << "Closest empty table from (0,0): "
+         << emptyTable.str() << "\n";
+    auto eqPos = kitchen.getPosition("DISH");
+    cout << "'DISH' positions found: " << eqPos.size() << "\n";
+
+    return 0;
+}
