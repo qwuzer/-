@@ -35,40 +35,41 @@ public:
     Items() {}
 
     Items(const std::string& rawString) {
-        std::stringstream ss(rawString);
-        std::string token;
-        while (std::getline(ss, token, '-')) {
-            if (!token.empty()) {
-                items_.push_back(token);
-            }
-        }
+        setItems(rawString);
     }
 
     void setItems(const std::string& rawString) {
-        items_.clear();
-        std::stringstream ss(rawString);
-        std::string token;
-        while (std::getline(ss, token, '-')) {
-            if (!token.empty()) {
-                items_.push_back(token);
-            }
-        }
+        items_ = rawString;
     }
 
     bool hasItem(const std::string& item) const {
-        return std::find(items_.begin(), items_.end(), item) != items_.end();
+        std::stringstream ss(items_);
+        std::string token;
+        while (std::getline(ss, token, '-')) {
+            if (token == item) return true;
+        }
+        return false;
     }
 
     bool hasAllItems(const Items& other) const {
-        for (const auto& item : other.items_) {
-            if (!hasItem(item)) return false;
+        std::stringstream ss(other.items_);
+        std::string token;
+        while (std::getline(ss, token, '-')) {
+            if (!hasItem(token)) return false;
         }
         return true;
     }
 
-    const std::vector<std::string>& getItems() const 
-    {
-        return items_;
+    std::vector<std::string> getItems() const {
+        std::vector<std::string> result;
+        std::stringstream ss(items_);
+        std::string token;
+        while (std::getline(ss, token, '-')) {
+            if (!token.empty()) {
+                result.push_back(token);
+            }
+        }
+        return result;
     }
 
     bool isEmpty() const {
@@ -76,7 +77,7 @@ public:
     }
 
 private:
-    std::vector<std::string> items_;
+    std::string items_;
 };
 
 
@@ -332,7 +333,7 @@ public:
     }
 private:
     Position pos_;
-    std::string items_;
+    Items items_;
 };
 
 
