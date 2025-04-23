@@ -60,6 +60,10 @@ public:
         return true;
     }
 
+    std::string getItemsString() const {
+        return items_;
+    }
+
     std::vector<std::string> getItems() const {
         std::vector<std::string> result;
         std::stringstream ss(items_);
