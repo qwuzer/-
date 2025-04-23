@@ -67,14 +67,14 @@ public:
         return true;
     }
 
-    bool hasAllItems(const Items& other) const {
-        std::stringstream ss(other.items_);
-        std::string token;
-        while (std::getline(ss, token, '-')) {
-            if (!hasItem(token)) return false;
-        }
-        return true;
-    }
+    // bool hasAllItems(const Items& other) const {
+    //     std::stringstream ss(other.items_);
+    //     std::string token;
+    //     while (std::getline(ss, token, '-')) {
+    //         if (!hasItem(token)) return false;
+    //     }
+    //     return true;
+    // }
 
     std::string getItemsString() const {
         return items_;
@@ -99,6 +99,65 @@ public:
 private:
     std::string items_;
 };
+
+
+
+class Table {
+    public:
+        Table() {}
+        Table(const Position& pos, const std::string& itemStr) : pos_(pos) {
+            items_.setItems(itemStr);
+        }
+    
+        void setPosition(const Position& pos) {
+            pos_ = pos;
+        }
+    
+        void setItems(const std::string& itemStr) {
+            items_.setItems(itemStr);
+        }
+    
+        Position getPosition() const {
+            return pos_;
+        }
+    
+        Items getItems() const {
+            return items_;
+        }
+    private:
+        Position pos_;
+        Items items_;
+    };
+    
+    
+    class Customer {
+    public:
+        Customer() {}
+        
+        Customer(const std::string& itemStr, int awardValue)
+            : item_(Items(itemStr)), award_(awardValue) {}
+    
+        void setItems(const std::string& itemStr) {
+            item_.setItems(itemStr);
+        }
+        
+        void setAward(int awardValue) {
+            award_ = awardValue;
+        }
+    
+        const Items& getItems() const {
+            return item_;
+        }
+    
+        const int& getAward() const {
+            return award_;
+        }
+    
+    private:
+        Items item_;
+        int award_;
+    };
+
 
 
 class Chef {
@@ -326,59 +385,3 @@ private:
 
 
 
-
-class Table {
-public:
-    Table() {}
-    Table(const Position& pos, const std::string& itemStr) : pos_(pos) {
-        items_.setItems(itemStr);
-    }
-
-    void setPosition(const Position& pos) {
-        pos_ = pos;
-    }
-
-    void setItems(const std::string& itemStr) {
-        items_.setItems(itemStr);
-    }
-
-    Position getPosition() const {
-        return pos_;
-    }
-
-    Items getItems() const {
-        return items_;
-    }
-private:
-    Position pos_;
-    Items items_;
-};
-
-
-class Customer {
-public:
-    Customer() {}
-    
-    Customer(const std::string& itemStr, int awardValue)
-        : item_(Items(itemStr)), award_(awardValue) {}
-
-    void setItems(const std::string& itemStr) {
-        item_.setItems(itemStr);
-    }
-    
-    void setAward(int awardValue) {
-        award_ = awardValue;
-    }
-
-    const Items& getItems() const {
-        return item_;
-    }
-
-    const int& getAward() const {
-        return award_;
-    }
-
-private:
-    Items item_;
-    int award_;
-};
