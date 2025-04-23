@@ -149,7 +149,7 @@ public:
         return item_.getItems();
     }
 
-    bool hasItem(const string item) {
+    bool hasItem(const string& item) {
         ensureInitialized();
         return item_.hasItem(item);
     }
