@@ -43,12 +43,28 @@ public:
     }
 
     bool hasItem(const std::string& item) const {
-        std::stringstream ss(items_);
-        std::string token;
-        while (std::getline(ss, token, '-')) {
-            if (token == item) return true;
+        const auto targetItems = Items(item).getItems();
+        const auto currentItems = getItems();
+
+        for (const auto& i : targetItems) {
+            bool found = false;
+            for (const auto& j : currentItems) {
+                if (i.compare(j) == 0) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) return false;
         }
-        return false;
+        return true;
+    }
+
+
+    bool hasAllItems(const Items& other) const {
+        for (const auto& item : other.getItems()) {
+            if (!hasItem(item)) return false;
+        }
+        return true;
     }
 
     bool hasAllItems(const Items& other) const {
