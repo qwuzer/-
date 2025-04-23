@@ -6,59 +6,20 @@
 class Items {
 public:
     Items() {}
+    Items(const std::string& rawString);
 
-    Items(const std::string& rawString) {
-        std::stringstream ss(rawString);
-        std::string token;
-        while (std::getline(ss, token, '-')) {
-            if (!token.empty()) {
-                items_.push_back(token);
-            }
-        }
-    }
+    void setItems(const std::string& rawString);
 
-    void setItems(const std::string& rawString) {
-        items_.clear();
-        std::stringstream ss(rawString);
-        std::string token;
-        while (std::getline(ss, token, '-')) {
-            if (!token.empty()) {
-                items_.push_back(token);
-            }
-        }
-    }
+    bool hasItem(const std::string& item) const;
+    bool hasAllItems(const Items& other) const;
+    bool isEmpty() const;
 
-    bool hasItem(const std::string& item) const {
-        return std::find(items_.begin(), items_.end(), item) != items_.end();
-    }
-
-    bool hasAllItems(const Items& other) const {
-        for (const auto& item : other.items_) {
-            if (!hasItem(item)) return false;
-        }
-        return true;
-    }
-
-    const std::vector<std::string>& getItems() const 
-    {
-        return items_;
-    }
-
-    bool isEmpty() const {
-        return items_.empty();
-    }
-
+    const std::vector<std::string>& getItems() const;
+    
 private:
     std::vector<std::string> items_;
-
-    // void AddItem(const std::string& item) {
-    //     contents_.push_back(item);
-    // }
-
-    // void ClearItems() {
-    //     contents_.clear();
-    // }
 };
+
 
 class Table {
 public:

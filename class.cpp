@@ -329,3 +329,32 @@ private:
     Position pos_;
     Items items_;
 };
+
+
+class Customer {
+public:
+    Customer() {}
+    
+    Customer(const std::string& itemStr, int awardValue)
+        : item_(Items(itemStr)), award_(awardValue) {}
+
+    void setItems(const std::string& itemStr) {
+        item_.setItems(itemStr);
+    }
+    
+    void setAward(int awardValue) {
+        award_ = awardValue;
+    }
+
+    const Items& getItems() const {
+        return item_;
+    }
+
+    const int& getAward() const {
+        return award_;
+    }
+
+private:
+    Items item_;
+    int award_;
+};
