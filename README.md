@@ -66,6 +66,8 @@ Represents a collection of item strings (e.g., ingredients or dishes).
 
 - `bool isEmpty() const`: Return `true` if no items are held.
 
+- `string getItemsString() const`: Get a string representation of the current item list, with items separated by hyphens (-). 
+  
 - `const vector<string>& getItems() const`: Get a read-only reference to the current list of items.
 
 #### Private Data Members
