@@ -147,22 +147,22 @@ private:
 
 class Kitchen {
 public:
-    Kitchen() : map_(7, vector<char>(11, '.')) {}
+    static constexpr int kMaxHeight = 7;
+    static constexpr int kMaxWidth = 11;
+
+    Kitchen() : map_(kMaxHeight, vector<char>(kMaxWidth, '.')) {}
 
     void initMap() {
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < kMaxHeight; i++) {
             string line;
             getline(cin, line);
-            for (int j = 0; j < 11; j++) {
-                map_[i][j] = line[j];
+            for (int j = 0; j < kMaxWidth; j++) {
+                char ch = line[j];
+                map_[i][j] = (ch == '0' || ch == '1') ? '.' : ch;
 
-                if (map_[i][j] == '0' || map_[i][j] == '1') {
-                    map_[i][j] = '.';
-                }
-
-                if (line[j] != '.' && line[j] != '#') {
+                if (ch != '.' && ch != '#' && ch != '0' && ch != '1') {
                     string name;
-                    switch (line[j]) {
+                    switch (ch) {
                         case 'D': name = "DISH"; break;
                         case 'W': name = "WINDOW"; break;
                         case 'B': name = "BLUEBERRIES"; break;
@@ -171,20 +171,20 @@ public:
                         case 'C': name = "CHOPPING_BOARD"; break;
                         case 'H': name = "DOUGH"; break;
                         case 'O': name = "OVEN"; break;
-                        default: name = "UNKNOWN"; break;
+                        default:
+                            cerr << "Warning: Unknown equipment character: " << ch << endl;
+                            continue;
                     }
-                    if (name != "UNKNOWN") {
-                        equipment_[name] = Position{j, i};
-                    }
+                    equipment_[name] = Position{j, i};
                 }
             }
         }
     }
 
     void setTableState() {
-        tables_.clear();  
+        tables_.clear();
 
-        int num_tables_with_items = 0;
+        int num_tables_with_items;
         cin >> num_tables_with_items; cin.ignore();
 
         for (int i = 0; i < num_tables_with_items; i++) {
@@ -192,15 +192,14 @@ public:
             string item;
             cin >> table_x >> table_y >> item; cin.ignore();
 
-            Table table(Position{table_x, table_y}, item);
-            tables_.push_back(table);
+            tables_.emplace_back(Position{table_x, table_y}, item);
         }
     }
 
-    Position getClosestEmptyTable(const int& x, const int& y) {
-        vector<vector<bool>> visited(7, vector<bool>(11, false));
-        queue<pair<Position, int>> q;
-        q.push({Position{x, y}, 0});
+    Position getClosestEmptyTable(const int& x, const int& y) const {
+        vector<vector<bool>> visited(kMaxHeight, vector<bool>(kMaxWidth, false));
+        queue<Position> q;
+        q.push(Position{x, y});
         visited[y][x] = true;
 
         vector<pair<int, int>> directions = {{0,1}, {1,0}, {0,-1}, {-1,0}};
@@ -210,63 +209,65 @@ public:
         };
 
         while (!q.empty()) {
-            auto [current, dist] = q.front(); q.pop();
+            Position current = q.front(); q.pop();
 
-            for (auto [dx, dy] : neighbor8) {
+            for (const auto& [dx, dy] : neighbor8) {
                 int nx = current.x + dx;
                 int ny = current.y + dy;
-                if (isInside(nx, ny) && map_[ny][nx] == '#') {
-                    if (!isTableOccupied(Position{nx, ny})) {
-                        return Position{nx, ny};
-                    }
+                if (isInside(nx, ny) && map_[ny][nx] == '#' &&
+                    !isTableOccupied(Position{nx, ny})) {
+                    return Position{nx, ny};
                 }
             }
 
-            for (auto [dx, dy] : directions) {
+            for (const auto& [dx, dy] : directions) {
                 int nx = current.x + dx;
                 int ny = current.y + dy;
                 if (isInside(nx, ny) && !visited[ny][nx] && map_[ny][nx] == '.') {
                     visited[ny][nx] = true;
-                    q.push({Position{nx, ny}, dist + 1});
+                    q.push(Position{nx, ny});
                 }
             }
         }
+
         return Position{-1, -1};
     }
 
-    vector<Position> getPosition(const string& name) {
+    vector<Position> getPosition(const string& name) const {
         vector<Position> result;
-        for (const auto& entry : equipment_) {
-            if (entry.first == name) {
-                result.push_back(entry.second);
-            }
+
+        auto it = equipment_.find(name);
+        if (it != equipment_.end()) {
+            result.push_back(it->second);
         }
+
         for (const auto& table : tables_) {
             if (table.getItems().hasItem(name)) {
                 result.push_back(table.getPosition());
             }
         }
+
         return result;
     }
 
-    void printMap() {
+    void printMap() const {
         cerr << "Map:" << endl;
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 11; j++) {
+        for (int i = 0; i < kMaxHeight; i++) {
+            for (int j = 0; j < kMaxWidth; j++) {
                 cerr << map_[i][j];
             }
             cerr << endl;
         }
     }
 
-    void printEquipment() {
+    void printEquipment() const {
         cerr << "Equipment:" << endl;
         for (const auto& n : equipment_) {
             cerr << n.first << ": " << n.second.x << "," << n.second.y << endl;
         }
     }
 
-    void printTable() {
+    void printTable() const {
         cerr << "Table:" << endl;
         for (const auto& t : tables_) {
             cerr << "Pos: (" << t.getPosition().x << ", " << t.getPosition().y << ")  Items: ";
@@ -277,20 +278,20 @@ public:
         }
     }
 
-    vector<vector<char>> getMap() const { return map_; }
-    unordered_map<string, Position> getEquipment() const { return equipment_; }
-    vector<Table> getTable() const { return tables_; }
+    const vector<vector<char>>& getMap() const { return map_; }
+    const unordered_map<string, Position>& getEquipment() const { return equipment_; }
+    const vector<Table>& getTable() const { return tables_; }
 
 private:
     vector<vector<char>> map_;
     unordered_map<string, Position> equipment_;
     vector<Table> tables_;
 
-    bool isInside(int x, int y) {
-        return x >= 0 && y >= 0 && x < 11 && y < 7;
+    bool isInside(int x, int y) const {
+        return x >= 0 && y >= 0 && x < kMaxWidth && y < kMaxHeight;
     }
 
-    bool isTableOccupied(const Position& pos) {
+    bool isTableOccupied(const Position& pos) const {
         for (const auto& table : tables_) {
             if (table.getPosition().x == pos.x && table.getPosition().y == pos.y) {
                 return true;
