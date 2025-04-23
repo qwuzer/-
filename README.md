@@ -76,17 +76,17 @@ Represents a collection of item strings (e.g., ingredients or dishes).
 
 - `Items()`: Construct an empty `Items` object.
 
-- `Items(const std::string& rawString)`: Parse a string like `"DISH-ICE_CREAM"` and store each token as an item.
+- `Items(const string& rawString)`: Parse a string like `"DISH-ICE_CREAM"` and store each token as an item.
 
-- `void setItems(const std::string& rawString)`: Update the current item list using a dash-separated string.
+- `void setItems(const string& rawString)`: Update the current item list using a dash-separated string.
 
-- `bool hasItem(const std::string& item) const`: Check whether the item exists in the current collection.
+- `bool hasItem(const string& item) const`: Check whether the item exists in the current collection.
 
 - `bool hasAllItems(const Items& other) const`: Check whether all items in `other` are contained in the current object.
 
 - `bool isEmpty() const`: Return `true` if no items are held.
 
-- `const std::vector<std::string>& getItems() const`: Get a read-only reference to the current list of items.
+- `const vector<string>& getItems() const`: Get a read-only reference to the current list of items.
 
 #### Private Data Members
 
@@ -100,11 +100,11 @@ Represents a table with a position and the items on it.
 
 - `Table()`: Default constructor.
 
-- `Table(const Position& pos)`: Construct a table at the given position.
+- `Table(const Position& pos, const string& itemStr)`: Construct a table at the given position.
 
 - `void setPosition(const Position& pos)`: Set the position of the table.
 
-- `void setItems(const std::string& itemStr)`: Update the items on the table.
+- `void setItems(const string& itemStr)`: Update the items on the table.
 
 - `Position getPosition() const`: Retrieve the table's position.
 
@@ -148,9 +148,9 @@ Represents a customer’s order and the reward given upon fulfilling it.
 
 - `Customer()`: Default constructor.
 
-- `Customer(const std::string& itemStr, int awardValue)`: Construct with desired items and reward.
+- `Customer(const string& itemStr, int awardValue)`: Construct with desired items and reward.
 
-- `void setItems(const std::string& itemStr)`: Update the required items.
+- `void setItems(const string& itemStr)`: Update the required items.
 
 - `void setAward(int awardValue)`: Update the reward value.
 
