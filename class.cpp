@@ -126,7 +126,7 @@ public:
         if (action == "WAIT") {
             return action + "; " + comment;
         } else {
-            return action + target.str() + "; " + comment;
+            return action + " " + target.str() + "; " + comment;
         }
     }
 
