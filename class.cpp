@@ -157,7 +157,7 @@ public:
                 map_[i][j] = line[j];
 
                 if (map_[i][j] == '0' || map_[i][j] == '1') {
-                    map_[i][j] = '.';  // 清理玩家初始位置
+                    map_[i][j] = '.';
                 }
 
                 if (line[j] != '.' && line[j] != '#') {
@@ -181,7 +181,23 @@ public:
         }
     }
 
-    Position getClosestEmptyTable(const int &x, const int &y) {
+    void setTableState() {
+        tables_.clear();  
+
+        int num_tables_with_items = 0;
+        cin >> num_tables_with_items; cin.ignore();
+
+        for (int i = 0; i < num_tables_with_items; i++) {
+            int table_x, table_y;
+            string item;
+            cin >> table_x >> table_y >> item; cin.ignore();
+
+            Table table(Position{table_x, table_y}, item);
+            tables_.push_back(table);
+        }
+    }
+
+    Position getClosestEmptyTable(const int& x, const int& y) {
         vector<vector<bool>> visited(7, vector<bool>(11, false));
         queue<pair<Position, int>> q;
         q.push({Position{x, y}, 0});
@@ -215,41 +231,21 @@ public:
                 }
             }
         }
-        return Position{-1, -1}; // 沒找到
+        return Position{-1, -1};
     }
 
-    void setTableState() {
-        tables_.clear();
-
-        int num_tables_with_items = 0;
-        cin >> num_tables_with_items; cin.ignore();
-
-        for (int i = 0; i < num_tables_with_items; i++) {
-            int table_x, table_y;
-            string item;
-            cin >> table_x >> table_y >> item; cin.ignore();
-
-            Table table(Position{table_x, table_y});
-            table.setItems(item);
-            tables_.push_back(table);
-        }
-    }
-
-    vector<Position> getPosition(const string &name) {
+    vector<Position> getPosition(const string& name) {
         vector<Position> result;
-
-        for (const auto &entry : equipment_) {
+        for (const auto& entry : equipment_) {
             if (entry.first == name) {
                 result.push_back(entry.second);
             }
         }
-
-        for (const auto &table : tables_) {
+        for (const auto& table : tables_) {
             if (table.getItems().hasItem(name)) {
                 result.push_back(table.getPosition());
             }
         }
-
         return result;
     }
 
@@ -303,6 +299,7 @@ private:
         return false;
     }
 };
+
 
 
 
