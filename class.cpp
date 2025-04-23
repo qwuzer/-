@@ -13,13 +13,17 @@ using namespace std;
 
 class Position {
 public: 
-    int x, y;
+    int x = -1;
+    int y = -1;
+
     int distanceTo(const Position& other) const {
         return abs(x - other.x) + abs(y - other.y);
     }
     bool isAdjacentTo(const Position& other) const {
-        return distanceTo(other) == 1 || (abs(x - other.x) == 1 && abs(y - other.y) == 1);
+        return (distanceTo(other) == 1) || 
+               (abs(x - other.x) == 1 && abs(y - other.y) == 1);
     }
+    
     std::string str() const {
         return std::to_string(x) + " " + std::to_string(y);
     }
