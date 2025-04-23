@@ -23,7 +23,7 @@ public:
         return (distanceTo(other) == 1) || 
                (abs(x - other.x) == 1 && abs(y - other.y) == 1);
     }
-    
+
     std::string str() const {
         return std::to_string(x) + " " + std::to_string(y);
     }
@@ -332,7 +332,7 @@ public:
     }
 private:
     Position pos_;
-    Items items_;
+    std::string items_;
 };
 
 
